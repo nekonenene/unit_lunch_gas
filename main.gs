@@ -56,7 +56,7 @@ function createGroup() {
 function setParticipantIds() {
   const lastRow = participantSheet.getLastRow();
   const idsArray = participantSheet.getRange(2, 2, lastRow - 1).getValues();
-  const participantIds = ArrayLib.transpose(idsArray)[0];
+  const participantIds = transposeDoubleArray(idsArray)[0];
   const participantIdsWithoutAbsence = participantIds.filter(id => id !== '' && id !== 0 && id !== 'x');
 
   return participantIdsWithoutAbsence;
@@ -86,5 +86,24 @@ function shuffle(array) {
     var tmp = array[i];
     array[i] = array[r];
     array[r] = tmp;
+  }
+}
+
+// 二次元配列の行と列を入れ替える
+// オリジナル: https://script.google.com/home/projects/1r9wNWbta3ebuYL4ENAdIp4UYKmyNiWf1AqsXYzfXduRHhTZEeTxS9MhZ/edit
+function transposeDoubleArray(data) {
+  if (data.length > 0) {
+    var r = [];
+    for (var i = 0; i < data[0].length; i++) {
+      var newRow = [];
+      for (var j = 0; j < data.length; j++) {
+        newRow[j] = data[j][i];
+      }
+      r[i] = newRow;
+    }
+    return r;
+  }
+  else {
+    return data;
   }
 }
