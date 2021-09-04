@@ -10,11 +10,11 @@ function createGroup() {
   var participantIds = setParticipantIds();
   var bestScore = 0;
   var bestGroup = [];
-  
+
   for(var i = 0; i < 200; i++) {
     var groups = eachSlice(participantIds, participantSheet.getRange(2, 3).getValue());
     var patternScore = 0;
-    
+
     for(var j = 0; j < groups.length; j++) {
       var groupMembers = groups[j];
       var groupScore = 0;
@@ -49,16 +49,16 @@ function createGroup() {
     }
     shuffle(participantIds);
   }
-  Logger.log(bestGroup); 
+  Logger.log(bestGroup);
 }
 
 // ランチ参加者のIDを一次配列で取得する
 function setParticipantIds() {
-  var participantIdArray = [];
-  for(var i = 2; i <= participantSheet.getLastRow(); i++) {
-    participantIdArray.push(participantSheet.getRange(i, 2).getValue());
-  }
-  return participantIdArray;
+  const lastRow = participantSheet.getLastRow();
+  const idsArray = participantSheet.getRange(2, 2, lastRow - 1).getValues();
+  const participantIds = ArrayLib.transpose(idsArray)[0];
+
+  return participantIds;
 }
 
 // 配列をシャッフルする
@@ -75,13 +75,13 @@ function shuffle(array) {
 function eachSlice(array, number) {
   var index = 0;
   var results = [];
-  
+
   while(index + number < array.length) {
     var result = array.slice(index, index + number);
     results.push(result);
     index = index + number
   }
-  
+
   var rest = array.slice(index, array.length + 1);
   results.push(rest);
   return results;
