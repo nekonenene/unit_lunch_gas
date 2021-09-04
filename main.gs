@@ -1,5 +1,6 @@
 // スプレッドシートの取得
-var spreadSheet = SpreadsheetApp.openByUrl('ここにスプレッドシートのURLを挿入');
+var spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+// var spreadSheet = SpreadsheetApp.openByUrl('ここにスプレッドシートのURLを挿入'); // URL指定で取得したい場合はこちら
 
 // シートの取得
 var participantSheet = spreadSheet.getSheetByName("参加者");
