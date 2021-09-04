@@ -141,3 +141,11 @@ function transposeDoubleArray(data) {
     return data;
   }
 }
+
+// シートを開いたときにカスタムメニューを追加
+function onOpen() {
+  const ui = SpreadsheetApp.getUi();
+  ui.createMenu('★★★')
+    .addItem('グループ分けをおこなう', 'createGroup')
+    .addToUi();
+}
