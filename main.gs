@@ -12,7 +12,7 @@ function createGroup() {
   var bestGroup = [];
 
   for(var i = 0; i < 200; i++) {
-    var groups = eachSlice(participantIds, participantSheet.getRange(2, 3).getValue());
+    var groups = slicesArray(participantIds, participantSheet.getRange(2, 3).getValue());
     var patternScore = 0;
 
     for(var j = 0; j < groups.length; j++) {
@@ -64,7 +64,7 @@ function setParticipantIds() {
 
 // 配列 array を、指定した最大個数 limitLength ずつに分割する
 // 二次元配列になって返る
-function eachSlice(array, limitLength) {
+function slicesArray(array, limitLength) {
   var index = 0;
   var results = [];
 
