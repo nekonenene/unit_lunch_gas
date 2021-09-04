@@ -5,51 +5,68 @@ var spreadSheet = SpreadsheetApp.openByUrl('ここにスプレッドシートの
 var participantSheet = spreadSheet.getSheetByName("参加者");
 var historySheet = spreadSheet.getSheetByName("履歴");
 
-// チーム分けの実行
+// チーム分けの実行：最良のグループの組み合わせを求めてログに吐き出す
 function createGroup() {
-  var participantIds = setParticipantIds();
-  var bestScore = 0;
-  var bestGroup = [];
+  const peopleLimitOfGroup = participantSheet.getRange(2, 3).getValue(); // 1グループの最大人数
+  const historyLastRowNumber = historySheet.getLastRow();
+  const historyLastColumnNumber = historySheet.getLastColumn();
+  const historySheetValues = historySheet.getRange(2, 1, historyLastRowNumber - 1, historyLastColumnNumber).getValues();
 
-  for(var i = 0; i < 200; i++) {
-    var groups = slicesArray(participantIds, participantSheet.getRange(2, 3).getValue());
-    var patternScore = 0;
+  let participantIds = setParticipantIds();
+  let bestGroups = [];
+  let bestGroupsPatternScore = 0;
 
-    for(var j = 0; j < groups.length; j++) {
-      var groupMembers = groups[j];
-      var groupScore = 0;
+  const shuffleLimitCount = 1000;
 
-      for(var k = 0; k < groupMembers.length - 1; k++) {
-        var score = 0;
-        var xHistory = historySheet.getRange(2, groupMembers[k], historySheet.getLastRow()).getValues();
+  // グループのシャッフルを shuffleLimitCount 回繰り返すことで、最良のグループを見つける仕組みになっている
+  for (let shuffleTryCount = 1; shuffleTryCount <= shuffleLimitCount; ++shuffleTryCount) {
+    const groups = slicesArray(participantIds, peopleLimitOfGroup);
+    let currentPatternScore = 0; // この値が低いほど、よいパターンと言える
 
-        for(var l = k + 1; l < groupMembers.length; l++){
-          var yHistory = historySheet.getRange(2, groupMembers[l], historySheet.getLastRow()).getValues();
+    for (let groupId = 0; groupId < groups.length; ++groupId) {
+      const groupMembers = groups[groupId];
+      let groupScore = 0; // この値が低いほど理想的なグループ
 
-          for(var m = 0; m < xHistory.length; m++) {
-            if(xHistory[m][0] == "" || yHistory[m][0] == ""){
+      for (let groupMemberX = 0; groupMemberX < groupMembers.length - 1; ++groupMemberX) {
+        let score = 0;
+        const columnX = groupMembers[groupMemberX];
+        const xHistory = transposeDoubleArray(historySheetValues)[columnX - 1]; // グループ groupId 内の X さんの参加履歴
+
+        for (let groupMemberY = groupMemberX + 1; groupMemberY < groupMembers.length; ++groupMemberY) {
+          const columnY = groupMembers[groupMemberY];
+          const yHistory = transposeDoubleArray(historySheetValues)[columnY - 1]; // グループ groupId 内の Y さんの参加履歴
+
+          for (let historyRow = 0; historyRow < xHistory.length; ++historyRow) {
+            if (xHistory[historyRow] === '' || yHistory[historyRow] === '') {
+              // 同じ値であっても、どっちも不参加の場合はスコア 0.5 倍の処理
               score *= 0.5;
-            } else if(xHistory[m][0] == yHistory[m][0]){
+            } else if (xHistory[historyRow] === yHistory[historyRow]) {
+              // 同じ値である（同じグループになっている）ならスコア +1 の処理
               score += 1;
             } else {
+              // それ以外ならスコア 0.5 倍の処理
               score *= 0.5;
             }
           }
           groupScore += score;
         }
       }
-      patternScore += groupScore;
+      currentPatternScore += groupScore;
     }
-    if(bestScore == 0) {
-      bestScore = patternScore;
-      bestGroup = groups;
-    } else if(bestScore > patternScore) {
-      bestScore = patternScore;
-      bestGroup = groups;
+
+    if (bestGroupsPatternScore === 0) {
+      bestGroupsPatternScore = currentPatternScore;
+      bestGroups = groups;
+    } else if (bestGroupsPatternScore > currentPatternScore) {
+      bestGroupsPatternScore = currentPatternScore;
+      bestGroups = groups;
     }
+
+    // [1, 2, 3] ... のような順番のまま出力されたらバグがあると気付けるよう、
+    // shuffle はループの最後におこなう
     shuffle(participantIds);
   }
-  Logger.log(bestGroup);
+  Logger.log(bestGroups);
 }
 
 // ランチ参加者のIDを一次配列で取得する
