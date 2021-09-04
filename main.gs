@@ -64,7 +64,7 @@ function setParticipantIds() {
 
 // 配列をシャッフルする
 function shuffle(array) {
-  for(var i = array.length - 1; i > 0; i--){
+  for (var i = array.length - 1; i > 0; --i) {
     var r = Math.floor(Math.random() * (i + 1));
     var tmp = array[i];
     array[i] = array[r];
@@ -72,18 +72,19 @@ function shuffle(array) {
   }
 }
 
-// 配列を指定した個数ずつに分割する
-function eachSlice(array, number) {
+// 配列 array を、指定した最大個数 limitLength ずつに分割する
+// 二次元配列になって返る
+function eachSlice(array, limitLength) {
   var index = 0;
   var results = [];
 
-  while(index + number < array.length) {
-    var result = array.slice(index, index + number);
+  while (array.length > index + limitLength) {
+    const result = array.slice(index, index + limitLength);
     results.push(result);
-    index = index + number
+    index += limitLength;
   }
 
-  var rest = array.slice(index, array.length + 1);
+  const rest = array.slice(index, array.length + 1);
   results.push(rest);
   return results;
 }
