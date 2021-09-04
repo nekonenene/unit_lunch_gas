@@ -1,10 +1,10 @@
 // スプレッドシートの取得
-var spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-// var spreadSheet = SpreadsheetApp.openByUrl('ここにスプレッドシートのURLを挿入'); // URL指定で取得したい場合はこちら
+const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+// const spreadSheet = SpreadsheetApp.openByUrl('ここにスプレッドシートのURLを挿入'); // URL指定で取得したい場合はこちら
 
 // シートの取得
-var participantSheet = spreadSheet.getSheetByName("参加者");
-var historySheet = spreadSheet.getSheetByName("履歴");
+const participantSheet = spreadSheet.getSheetByName("参加者");
+const historySheet = spreadSheet.getSheetByName("履歴");
 
 // チーム分けの実行：最良のグループの組み合わせを求めてログに吐き出す
 function createGroup() {
@@ -115,9 +115,9 @@ function slicesArray(array, limitLength) {
 
 // 配列をシャッフルする
 function shuffle(array) {
-  for (var i = array.length - 1; i > 0; --i) {
-    var r = Math.floor(Math.random() * (i + 1));
-    var tmp = array[i];
+  for (let i = array.length - 1; i > 0; --i) {
+    const r = Math.floor(Math.random() * (i + 1));
+    const tmp = array[i];
     array[i] = array[r];
     array[r] = tmp;
   }
@@ -127,17 +127,17 @@ function shuffle(array) {
 // オリジナル: https://script.google.com/home/projects/1r9wNWbta3ebuYL4ENAdIp4UYKmyNiWf1AqsXYzfXduRHhTZEeTxS9MhZ/edit
 function transposeDoubleArray(data) {
   if (data.length > 0) {
-    var r = [];
-    for (var i = 0; i < data[0].length; i++) {
-      var newRow = [];
-      for (var j = 0; j < data.length; j++) {
+    let newDoubleArray = [];
+    for (let i = 0; i < data[0].length; ++i) {
+      let newRow = [];
+      for (let j = 0; j < data.length; ++j) {
         newRow[j] = data[j][i];
       }
-      r[i] = newRow;
+      newDoubleArray[i] = newRow;
     }
-    return r;
-  }
-  else {
+
+    return newDoubleArray;
+  } else {
     return data;
   }
 }
