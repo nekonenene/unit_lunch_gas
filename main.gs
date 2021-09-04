@@ -11,7 +11,13 @@ function createGroup() {
   const peopleLimitOfGroup = participantSheet.getRange(2, 3).getValue(); // 1グループの最大人数
   const historyLastRowNumber = historySheet.getLastRow();
   const historyLastColumnNumber = historySheet.getLastColumn();
-  const historySheetValues = historySheet.getRange(2, 1, historyLastRowNumber - 1, historyLastColumnNumber).getValues();
+
+  let historySheetValues;
+  if (historyLastRowNumber >= 2) {
+    historySheetValues = historySheet.getRange(2, 1, historyLastRowNumber - 1, historyLastColumnNumber).getValues();
+  } else { // 履歴が1件もない場合の処理
+    historySheetValues = [new Array(historyLastColumnNumber)];
+  }
 
   let participantIds = setParticipantIds();
   let bestGroups = [];
