@@ -67,6 +67,16 @@ function createGroup() {
     shuffle(participantIds);
   }
   Logger.log(bestGroups);
+
+  let groupCharactersArray = [];
+  bestGroups.forEach((memberIds, groupIdx) => {
+    memberIds.forEach(memberId => {
+      groupCharactersArray[memberId - 1] = String.fromCharCode(65 + groupIdx);
+    })
+  });
+  Logger.log(groupCharactersArray);
+  Logger.log(groupCharactersArray.length);
+  historySheet.appendRow(groupCharactersArray);
 }
 
 // ランチ参加者のIDを一次配列で取得する
