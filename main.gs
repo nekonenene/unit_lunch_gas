@@ -57,8 +57,9 @@ function setParticipantIds() {
   const lastRow = participantSheet.getLastRow();
   const idsArray = participantSheet.getRange(2, 2, lastRow - 1).getValues();
   const participantIds = ArrayLib.transpose(idsArray)[0];
+  const participantIdsWithoutAbsence = participantIds.filter(id => id !== '' && id !== 0 && id !== 'x');
 
-  return participantIds;
+  return participantIdsWithoutAbsence;
 }
 
 // 配列をシャッフルする
