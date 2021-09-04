@@ -62,16 +62,6 @@ function setParticipantIds() {
   return participantIdsWithoutAbsence;
 }
 
-// 配列をシャッフルする
-function shuffle(array) {
-  for (var i = array.length - 1; i > 0; --i) {
-    var r = Math.floor(Math.random() * (i + 1));
-    var tmp = array[i];
-    array[i] = array[r];
-    array[r] = tmp;
-  }
-}
-
 // 配列 array を、指定した最大個数 limitLength ずつに分割する
 // 二次元配列になって返る
 function eachSlice(array, limitLength) {
@@ -87,4 +77,14 @@ function eachSlice(array, limitLength) {
   const rest = array.slice(index, array.length + 1);
   results.push(rest);
   return results;
+}
+
+// 配列をシャッフルする
+function shuffle(array) {
+  for (var i = array.length - 1; i > 0; --i) {
+    var r = Math.floor(Math.random() * (i + 1));
+    var tmp = array[i];
+    array[i] = array[r];
+    array[r] = tmp;
+  }
 }
