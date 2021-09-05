@@ -99,8 +99,8 @@ function setParticipantIds() {
 // 配列 array を、指定した最大個数 limitLength ずつに分割する
 // 二次元配列になって返る
 function slicesArray(array, limitLength) {
-  var index = 0;
-  var results = [];
+  let index = 0;
+  let results = [];
 
   while (array.length > index + limitLength) {
     const result = array.slice(index, index + limitLength);
