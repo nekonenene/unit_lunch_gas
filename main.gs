@@ -21,7 +21,7 @@ function createGroup() {
 
   let participantIds = setParticipantIds();
   let bestGroups = [];
-  let bestGroupsPatternScore = 0;
+  let bestGroupsPatternScore = null;
 
   const shuffleLimitCount = 1000;
 
@@ -61,7 +61,7 @@ function createGroup() {
       currentPatternScore += groupScore;
     }
 
-    if (bestGroupsPatternScore === 0) {
+    if (bestGroupsPatternScore === null) {
       bestGroupsPatternScore = currentPatternScore;
       bestGroups = groups;
     } else if (bestGroupsPatternScore > currentPatternScore) {
