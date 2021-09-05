@@ -61,10 +61,8 @@ function createGroup() {
       currentPatternScore += groupScore;
     }
 
-    if (bestGroupsPatternScore === null) {
-      bestGroupsPatternScore = currentPatternScore;
-      bestGroups = groups;
-    } else if (bestGroupsPatternScore > currentPatternScore) {
+    // bestGroupsPatternScore が未設定もしくは currentPatternScore より値が大きいときに bestGroups を更新
+    if (bestGroupsPatternScore === null || bestGroupsPatternScore > currentPatternScore) {
       bestGroupsPatternScore = currentPatternScore;
       bestGroups = groups;
     }
